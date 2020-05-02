@@ -1,6 +1,6 @@
 /* eslint-disable no-nested-ternary */
 /* eslint-disable max-len */
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import ApolloClient, { NormalizedCacheObject, InMemoryCache } from 'apollo-boost';
 import { ApolloProvider } from '@apollo/react-hooks';
 import Profile from '../Profile';
@@ -28,8 +28,6 @@ const createApolloClient = (authToken: string | undefined | null) : ApolloClient
 
 const DBConnection = () => {
   const token = localStorage.getItem('token');
-  console.log(token);
-
   const client = createApolloClient(token);
 
 
