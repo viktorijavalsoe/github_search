@@ -1,26 +1,19 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from 'react';
+import DBConnection from './components/DBConnection';
 
-function App() {
+const App = () => {
+  const [token, setToken] = useState<string>('');
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <form onSubmit={() => localStorage.setItem('token', token)}>
+        <p>GitHUb Custom AccessToken:</p>
+        <input style={{ border: 'red' }} type="text" name="token" value={token} onChange={(event: React.ChangeEvent<HTMLInputElement>):void => setToken(event.target.value)} />
+      </form>
+      <DBConnection />
+    </>
   );
-}
+};
+
 
 export default App;
