@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import React, { ReactNode } from 'react';
 import ApolloClient, { NormalizedCacheObject, InMemoryCache } from 'apollo-boost';
 import { ApolloProvider } from '@apollo/react-hooks';
@@ -28,6 +29,8 @@ const createApolloClient = (authToken: string | undefined | null) : ApolloClient
 const MainContainer = styled.div`
   padding: ${({ theme }): string => theme.space[1]};
   background-color: ${({ theme }): string => theme.background};
+  max-width: 960px;
+  margin: 0 auto;
   
 `;
 

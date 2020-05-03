@@ -4,7 +4,6 @@ import BackgroundImage from '../assets/background.png';
 import BackgroundImage2 from '../assets/background2.png';
 import Planet from '../assets/planet.png';
 
-
 const animate = keyframes`
   0%, 20%, 40%, 60%, 80%, 100% {
     opacity: 0;
