@@ -1,9 +1,8 @@
-/* eslint-disable no-nested-ternary */
-/* eslint-disable max-len */
-import React, { useState, useEffect } from 'react';
+import React, { ReactNode } from 'react';
 import ApolloClient, { NormalizedCacheObject, InMemoryCache } from 'apollo-boost';
 import { ApolloProvider } from '@apollo/react-hooks';
-import Profile from '../Profile';
+import styled from 'styled-components';
+import Header from './Header';
 
 
 // DB connection
@@ -26,17 +25,24 @@ const createApolloClient = (authToken: string | undefined | null) : ApolloClient
 });
 
 
-const DBConnection = () => {
+const MainContainer = styled.div`
+  padding: ${({ theme }): string => theme.space[1]};
+  background-color: ${({ theme }): string => theme.background};
+  
+`;
+
+
+const Layout = ({ children }: {children: ReactNode}): JSX.Element => {
   const token = localStorage.getItem('token');
   const client = createApolloClient(token);
-
-
   return (
     <ApolloProvider client={client}>
-      <Profile />
+      <Header />
+      <MainContainer>
+        {children}
+      </MainContainer>
     </ApolloProvider>
   );
 };
 
-
-export default DBConnection;
+export default Layout;
