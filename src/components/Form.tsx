@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-const Form = styled.form`
+const FormContainer = styled.form`
   display: flex;
   flex-direction: column;
   max-width: 300px;
@@ -30,11 +30,11 @@ interface IAppProps {
   handleSubmit: ((e: React.FormEvent<HTMLFormElement>) => void);
 }
 
-const App = ({ token, handleChange, handleSubmit }: IAppProps): JSX.Element => (
-  <Form onSubmit={handleSubmit}>
+const Form = ({ token, handleChange, handleSubmit }: IAppProps): JSX.Element => (
+  <FormContainer onSubmit={handleSubmit}>
     <InputField type="text" name="token" value={token} onChange={handleChange} />
     <SubmitBtn type="submit" value="Submit" />
-  </Form>
+  </FormContainer>
 );
 
-export default App;
+export default Form;

@@ -22,7 +22,7 @@ export interface IRepositoryNode{
 }
 
 export interface IUserInfo {
-	id: string;
+  id: string;
   bio: string;
   createdAt: string;
   repositories: {
@@ -30,9 +30,6 @@ export interface IUserInfo {
     name: string;
     edges: Array <IRepositoryNode>
   };
-//   contributionsCollection: {
-//     contributionCalendar: IContributionCalendar;
-//   };
 }
 
 export interface IUser{
