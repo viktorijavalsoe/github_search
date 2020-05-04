@@ -1,9 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
-import { Redirect } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useQuery } from '@apollo/react-hooks';
 import { gql } from 'apollo-boost';
 import BackgroundImage from '../assets/background.png';
+import Logo from '../assets/logo.png';
+import { LANDING_PAGE } from '../utils/urlRoutes';
+import Hamburger from './Hamburger';
 
 
 const GET_USER_INFO = gql`
@@ -21,33 +24,48 @@ const HeaderContainer = styled.header`
   height: 80px;
   background: url(${BackgroundImage});
   background-color: ${({ theme }): string => theme.background};
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  padding: ${({ theme }): string => theme.space[0]};
-  p{
-    color: white;
-    text-transform: capitalize;
-  }
+  padding: ${({ theme }): string => theme.space[1]};
 `;
 
-const Avatar = styled.img`
+const NavigationContainer = styled.nav`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 100%;
+`;
+
+const LogoContainer = styled.img`
   height: 50px;
   width: 50px;
   object-fit: cover;
   border-radius: 50%;
-  margin-left: ${({ theme }): string => theme.space[2]};
-  `;
+`;
 
+const ImageContainer = styled(LogoContainer)`
+height: 30px;
+width: 30px;
+margin-right: ${({ theme }): string => theme.space[0]};
+`;
 
 const Header = () => {
   const { loading, error, data } = useQuery(GET_USER_INFO);
+
+  const [open, setOpen] = useState(false);
   if (loading) return <p>Loading...</p>;
-  if (error) return <Redirect to="/" />;
+  if (error) return <p>Loading...</p>;
   return (
     <HeaderContainer>
-      <p>{data.viewer.name}</p>
-      <Avatar src={data.viewer.avatarUrl} alt="avatar" />
+      <NavigationContainer>
+        <Link to={LANDING_PAGE.path}>
+          <LogoContainer src={Logo} alt="logo" />
+        </Link>
+        <div style={{ display: 'flex', marginRight: '80px', alignItems: 'center' }}>
+          <ImageContainer src={data.viewer.avatarUrl} alt="avatar" />
+          <p>{data.viewer.name}</p>
+          <Hamburger open={open} setOpen={setOpen} />
+        </div>
+      </NavigationContainer>
+
     </HeaderContainer>
   );
 };
