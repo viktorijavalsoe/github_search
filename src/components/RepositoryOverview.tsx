@@ -14,7 +14,6 @@ const MainWrapper = styled.main`
   flex-direction: column;
 `;
 
-
 const Heading = styled(StyledH1)`
   color: ${({ theme }): string => theme.primary};
   text-align: center;

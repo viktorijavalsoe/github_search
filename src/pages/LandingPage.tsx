@@ -37,7 +37,7 @@ const LandingPage = () : JSX.Element => {
 
   return (
     <BackgroundAnimation>
-      <Heading>Welcome to GitHub Odessy</Heading>
+      <Heading>Welcome to GitHub Odyssey</Heading>
       <SubHeading>Please enter your  GitHub Personal access token to start your journey.</SubHeading>
       <StyledP>
         Dont have one?

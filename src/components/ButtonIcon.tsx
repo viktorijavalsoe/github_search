@@ -26,7 +26,6 @@ interface IAppProps {
 const ButtonIcon = ({ text, handleSubmit, starred }: IAppProps): JSX.Element => (
   <AddButton onClick={handleSubmit}>
     <StarIcon height="20px" fill={starred ? '#F8DE92' : '#FFFFFF'} />
-
     {text}
   </AddButton>
 );

@@ -5,7 +5,7 @@ const StyledLinkWrapper = styled.a`
   color: ${({ theme }): string => theme.primary};
   font-style: italic;
   text-decorations: none;
-  font-size: ${({ theme }): string => theme.fontSizes[0]};
+  font-size: ${({ theme }): string => theme.fontSizes[1]};
   &:hover {
     color: ${({ theme }): string => theme.highLight};
   }
