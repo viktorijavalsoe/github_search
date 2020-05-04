@@ -22,7 +22,7 @@ export interface IRepositoryNode{
 }
 
 export interface IUserInfo {
-	id: string;
+  id: string;
   bio: string;
   createdAt: string;
   repositories: {

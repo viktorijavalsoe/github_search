@@ -1,52 +1,19 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useLazyQuery } from '@apollo/react-hooks';
-import { gql } from 'apollo-boost';
 import styled from 'styled-components';
 import { StyledH1, StyledH2 } from '../style/typography';
-
-
+// eslint-disable-next-line import/named
+import { SEARCH_REPOSITORY } from '../utils/queries';
 import Star from '../assets/star.png';
 import Form from './Form';
+import { IRepository, ISearch } from '../interfaces/IRepository';
+import Button from './Button';
 
-
-const SEARCH_REPO = gql`
-query ($repoQuery: String!){ 
-  search(query: $repoQuery, type: REPOSITORY, first: 10) {
-    repositoryCount
-    edges {
-      node {
-        ... on Repository{
-          name
-          description
-          id
-          url
-          watchers{
-            totalCount
-          }
-          stargazers{
-            totalCount
-          }
-         issues{
-          totalCount
-        }
-          licenseInfo {
-            conditions{
-              description
-            }
-          }
-          languages(first: 10){
-            edges{
-              node{
-                name
-              }
-            }
-          }
-        }
-      }
-    }
-  }
-}
+const MainWrapper = styled.main`
+  display: flex;
+  flex-direction: column;
 `;
+
 
 const Heading = styled(StyledH1)`
   color: ${({ theme }): string => theme.primary};
@@ -98,36 +65,27 @@ const Wrapper = styled.div`
   }
 `;
 
-interface ILanguage {
-  name: string;
-}
-
-interface IRepositoryInfo {
-  description: string;
-  id: string;
-  name: string;
-  url: string;
-  issues: {
-    totalcount: number;
-  },
-  watchers: {
-    totalCount: number
-  },
-  stargazers: {
-    totalCount: number
-  }
-}
-
-interface IRepository{
-  node: IRepositoryInfo;
-}
-
 const RepositoryOverview = () => {
   const [inputValue, setInputValue] = useState<string>('');
   const [repoQuery, setRepoQuery] = useState<string>('');
+  const [cursor, setCursor] = useState<string>('');
+  const [isNextPage, setIsNextPage] = useState<boolean>(false);
+
+
   const [loadResults, {
-    called, loading, data, error,
-  }] = useLazyQuery(SEARCH_REPO, { variables: { repoQuery } });
+    called, loading, data, error, fetchMore,
+  }] = useLazyQuery<ISearch>(SEARCH_REPOSITORY, { variables: { repoQuery } });
+
+
+  useEffect(() => {
+    if (data) {
+      setIsNextPage(data.search.pageInfo.hasNextPage);
+      setCursor(data.search.pageInfo.startCursor);
+    }
+  }, [data]);
+
+  console.log(isNextPage);
+
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>):void{
     setInputValue(e.target.value);
@@ -139,13 +97,35 @@ const RepositoryOverview = () => {
     loadResults();
   }
 
+  function loadMoreResults(): void{
+    fetchMore({
+      variables: {
+        after: cursor,
+      },
+      updateQuery: (prev, { fetchMoreResult }) => {
+        if (!fetchMoreResult) return prev;
+        return {
+          ...fetchMoreResult,
+          search: {
+            ...fetchMoreResult.search,
+            edges: [
+              ...prev.search.edges,
+              ...fetchMoreResult.search.edges,
+            ],
+          },
+        };
+      },
+    });
+  }
+
 
   if (error) return <p> Error...</p>;
   return (
-    <div>
+    <MainWrapper>
       <Heading>Search for repositories</Heading>
       <SubHeading>Explore GitHub universe and type in your search</SubHeading>
       <Form token={inputValue} handleChange={handleChange} handleSubmit={handleSubmit} />
+
       {called && loading && (<p>Loading ...</p>)}
       {data && (
         <>
@@ -158,7 +138,7 @@ const RepositoryOverview = () => {
           <Underline />
 
           {data.search.edges.map((repository: IRepository) => (
-            <div key={repository.node.id}>
+            <section key={repository.node.id}>
               <Wrapper>
                 <h3>{repository.node.name}</h3>
                 <StarContainer>
@@ -172,12 +152,15 @@ const RepositoryOverview = () => {
               </a>
 
               <Underline />
-            </div>
+            </section>
           ))}
+          {isNextPage && (
+            <Button text="Load more" handleSubmit={loadMoreResults} />
+          )}
         </>
       )}
 
-    </div>
+    </MainWrapper>
 
   );
 };
