@@ -30,9 +30,6 @@ export interface IUserInfo {
     name: string;
     edges: Array <IRepositoryNode>
   };
-//   contributionsCollection: {
-//     contributionCalendar: IContributionCalendar;
-//   };
 }
 
 export interface IUser{

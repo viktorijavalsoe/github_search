@@ -27,11 +27,6 @@ query ($repoQuery: String!, $after: String){
          issues{
           totalCount
         }
-          licenseInfo {
-            conditions{
-              description
-            }
-          }
           languages(first: 10){
             edges{
               node{
@@ -86,4 +81,14 @@ query($userName: String!) {
     }
   }
   }
+`;
+
+export const STAR_REPO = gql`
+mutation($repositoryId: ID!) {
+  addStar(input:{starrableId:$repositoryId}) {
+    starrable {
+      viewerHasStarred
+    }
+  }
+}
 `;

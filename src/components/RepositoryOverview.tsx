@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { useLazyQuery } from '@apollo/react-hooks';
+import { useLazyQuery, useMutation } from '@apollo/react-hooks';
 import styled from 'styled-components';
 import { StyledH1, StyledH2 } from '../style/typography';
 // eslint-disable-next-line import/named
-import { SEARCH_REPOSITORY } from '../utils/queries';
-import Star from '../assets/star.png';
+import { SEARCH_REPOSITORY, STAR_REPO } from '../utils/queries';
 import Form from './Form';
 import { IRepository, ISearch } from '../interfaces/IRepository';
 import Button from './Button';
+import Card from './Card';
 
 const MainWrapper = styled.main`
   display: flex;
@@ -25,18 +25,6 @@ const SubHeading = styled(StyledH2)`
   text-align: center;
 `;
 
-const StarContainer = styled.div`
-  width: 40px;
-  text-align: center;
-  p{
-    color: ${({ theme }): string => theme.highLight};
-    font-family: ${({ theme }): string => theme.fonts.heading};
-  }
-  img{
-    width:100%;
-  }
-`;
-
 const Details = styled.p`
   font-family: ${({ theme }): string => theme.fonts.heading};
   font-style: itallic;
@@ -52,30 +40,24 @@ const Underline = styled.div`
   margin: ${({ theme }): string => theme.space[3]} 0;
 `;
 
-const Wrapper = styled.div`
-  display: flex;
-  align-items: center; 
-  h3{
-    color: ${({ theme }): string => theme.accent};
-    font-family: ${({ theme }): string => theme.fonts.heading};
-    text-align: left;
-    font-size: ${({ theme }): string => theme.fontSizes[5]};
-    flex: 1;
-    margin: 0;
-  }
-`;
 
-const RepositoryOverview = () => {
+const RepositoryOverview = () : JSX.Element => {
   const [inputValue, setInputValue] = useState<string>('');
   const [repoQuery, setRepoQuery] = useState<string>('');
   const [cursor, setCursor] = useState<string>('');
   const [isNextPage, setIsNextPage] = useState<boolean>(false);
 
-
   const [loadResults, {
     called, loading, data, error, fetchMore,
   }] = useLazyQuery<ISearch>(SEARCH_REPOSITORY, { variables: { repoQuery } });
 
+  const [starRepository] = useMutation(STAR_REPO);
+
+  function handleAddRepo(id:string): Promise<any> {
+    return starRepository({
+      variables: { repositoryId: id },
+    });
+  }
 
   useEffect(() => {
     if (data) {
@@ -83,8 +65,6 @@ const RepositoryOverview = () => {
       setCursor(data.search.pageInfo.startCursor);
     }
   }, [data]);
-
-  console.log(isNextPage);
 
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>):void{
@@ -125,40 +105,25 @@ const RepositoryOverview = () => {
       <Heading>Search for repositories</Heading>
       <SubHeading>Explore GitHub universe and type in your search</SubHeading>
       <Form token={inputValue} handleChange={handleChange} handleSubmit={handleSubmit} />
-
       {called && loading && (<p>Loading ...</p>)}
       {data && (
-        <>
-          <Details>
-            Results:
-            {' '}
-            {data.search.repositoryCount}
-          </Details>
+      <>
+        <Details>
+          Results:
+          {' '}
+          {data.search.repositoryCount}
+        </Details>
+        <Underline />
 
-          <Underline />
-
-          {data.search.edges.map((repository: IRepository) => (
-            <section key={repository.node.id}>
-              <Wrapper>
-                <h3>{repository.node.name}</h3>
-                <StarContainer>
-                  <img src={Star} alt="star" />
-                  <p>{repository.node.stargazers.totalCount}</p>
-                </StarContainer>
-              </Wrapper>
-              <p>{repository.node.description}</p>
-              <a href={repository.node.url} target="_blank" rel="noopener noreferrer">
-                <p>View repository</p>
-              </a>
-
-              <Underline />
-            </section>
-          ))}
-          {isNextPage && (
-            <Button text="Load more" handleSubmit={loadMoreResults} />
-          )}
-        </>
+        {data.search.edges.map((repository: IRepository) => (
+          <Card repository={repository} handleAddRepo={handleAddRepo} />
+        ))}
+        {isNextPage && (
+        <Button text="Load more" handleSubmit={loadMoreResults} />
+        )}
+      </>
       )}
+
 
     </MainWrapper>
 

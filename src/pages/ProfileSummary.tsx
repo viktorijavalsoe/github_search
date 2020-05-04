@@ -52,7 +52,7 @@ query($userName: String!) {
   }
 `;
 
-const ProfileSummary = () => {
+const ProfileSummary = () : JSX.Element => {
   const [inputValue, setInputValue] = useState<string>('');
   const [userName, setUserName] = useState<string>('');
   const [loadResults, {

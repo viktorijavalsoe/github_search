@@ -5,7 +5,7 @@ import RepositoryOverview from '../components/RepositoryOverview';
 import Layout from '../components/Layout';
 
 
-const Dashboard = () => (
+const Dashboard = () : JSX.Element => (
   <Layout>
     <RepositoryOverview />
   </Layout>

@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import BackgroundAnimation from '../components/BackgroundAnimation';
 import Form from '../components/Form';
 import { StyledH1, StyledH2 } from '../style/typography';
+import StyledLink from '../components/StyledLink';
 
 const Heading = styled(StyledH1)`
   color: ${({ theme }): string => theme.primary};
@@ -19,13 +20,7 @@ const StyledP = styled.p`
   font-size: ${({ theme }): string => theme.fontSizes[0]};
 `;
 
-const StyledLink = styled.a`
-  color: ${({ theme }): string => theme.primary};
-  font-style: italic;
-  text-decorations: none;
-`;
-
-const LandingPage = () => {
+const LandingPage = () : JSX.Element => {
   const history = useHistory();
 
   const [token, setToken] = useState<string>('');
@@ -48,7 +43,7 @@ const LandingPage = () => {
         Dont have one?
         {' '}
         <span>
-          <StyledLink href="https://help.github.com/en/github/authenticating-to-github/creating-a-personal-access-token-for-the-command-line#creating-a-token" target="_blank" rel="noopener noreferrer">
+          <StyledLink href="https://help.github.com/en/github/authenticating-to-github/creating-a-personal-access-token-for-the-command-line#creating-a-token">
             Follow this instructions to get one
           </StyledLink>
         </span>
