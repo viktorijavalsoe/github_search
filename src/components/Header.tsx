@@ -7,6 +7,7 @@ import BackgroundImage from '../assets/background.png';
 import Logo from '../assets/logo.png';
 import { LANDING_PAGE } from '../utils/urlRoutes';
 import Hamburger from './Hamburger';
+import Dropdown from './Dropdown';
 
 
 const GET_USER_INFO = gql`
@@ -41,16 +42,11 @@ const LogoContainer = styled.img`
   border-radius: 50%;
 `;
 
-const ImageContainer = styled(LogoContainer)`
-height: 30px;
-width: 30px;
-margin-right: ${({ theme }): string => theme.space[0]};
-`;
-
 const Header = () => {
   const { loading, error, data } = useQuery(GET_USER_INFO);
 
   const [open, setOpen] = useState(false);
+
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Loading...</p>;
   return (
@@ -59,12 +55,9 @@ const Header = () => {
         <Link to={LANDING_PAGE.path}>
           <LogoContainer src={Logo} alt="logo" />
         </Link>
-        <div style={{ display: 'flex', marginRight: '80px', alignItems: 'center' }}>
-          <ImageContainer src={data.viewer.avatarUrl} alt="avatar" />
-          <p>{data.viewer.name}</p>
-          <Hamburger open={open} setOpen={setOpen} />
-        </div>
+        <Hamburger open={open} setOpen={setOpen} />
       </NavigationContainer>
+      <Dropdown open={open} avatar={data.viewer.avatarUrl} setOpen={setOpen} />
 
     </HeaderContainer>
   );

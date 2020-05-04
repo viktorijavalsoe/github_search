@@ -2,7 +2,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-const StyledBurger = styled.button<ButtonProps>`
+const StyledBurger = styled.button<StyledBurgerProps>`
     position: absolute;
     top: ${({ theme }) : string => theme.space[2]};
     right: ${({ theme }) : string => theme.space[2]};
@@ -43,7 +43,7 @@ const StyledBurger = styled.button<ButtonProps>`
     }
 `;
 
-type ButtonProps = {
+type StyledBurgerProps = {
   open: boolean;
 };
 

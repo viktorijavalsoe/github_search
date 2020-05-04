@@ -50,7 +50,8 @@ query($userName: String!) {
           id
           bio
           createdAt
-        
+          avatarUrl
+          name
           repositories(first:100){
             totalCount
             edges{

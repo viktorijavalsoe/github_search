@@ -1,7 +1,7 @@
 import React from 'react';
 
 import Layout from '../components/Layout';
-import ProfileSummary from './ProfileSummary';
+import ProfileSummary from '../components/ProfileSummary';
 
 const Test = () : JSX.Element => (
   <Layout>

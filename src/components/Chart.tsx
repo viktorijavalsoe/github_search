@@ -5,9 +5,26 @@ import { PieChart } from 'react-minimal-pie-chart';
 import styled from 'styled-components';
 import { IRepositoryNode, ILanguage } from '../interfaces/IUser';
 
+
+const Heading = styled.h2`
+  color: ${({ theme }): string => theme.accent};
+  font-family: ${({ theme }): string => theme.fonts.heading};
+  align-self: center;
+  text-align: center;
+`;
+
+const ChartContainer = styled.div`
+    display: flex;
+    align-items: flex-end;
+    &:first-chid{
+      flex: 1;
+      height: 350px;
+    }
+`;
+
 const LabelContainer = styled.div`
-  display: flex;
-  flex-wrap: wrap;
+  margin-left: ${({ theme }): string => theme.space[2]};
+  flex: 1;
 `;
 
 const FlexContainer = styled.div`
@@ -15,16 +32,10 @@ const FlexContainer = styled.div`
   align-items: flex-end;
   margin: ${({ theme }): string => theme.space[0]};
   p{
-      margin: 0 ${({ theme }): string => theme.space[0]};
+      margin: 0 12px;
   }
 
 `;
-
-const ChartContainer = styled.div`
-height: 300px;
-width: 300px;
-`;
-
 
 const ColorContainer = styled.div`
   height: ${({ theme }): string => theme.space[2]};
@@ -65,44 +76,46 @@ const Chart = ({ repositories, totalCount }: {repositories: Array<IRepositoryNod
 
   return (
     <div>
+      <Heading> Repos per Language </Heading>
       <ChartContainer>
+        <div>
 
-        <PieChart
-          data={chartpieData}
-          animate
-          animationDuration={500}
-          animationEasing="ease-out"
-          center={[
-            50,
-            50,
-          ]}
-          label={({ dataEntry }) => `${Math.round(dataEntry.percentage)} %`}
-          labelStyle={{
-            fill: '#F8DE92',
-            fontFamily: 'sans-serif',
-            fontSize: '6px',
-          }}
-          labelPosition={70}
-          lengthAngle={360}
-          lineWidth={15}
-          paddingAngle={5}
-          radius={50}
-          startAngle={0}
-          viewBoxSize={[
-            100,
-            100,
-          ]}
-        />
+          <PieChart
+            data={chartpieData}
+            animate
+            animationDuration={500}
+            animationEasing="ease-out"
+            center={[
+              50,
+              50,
+            ]}
+            label={({ dataEntry }) => `${Math.round(dataEntry.percentage)} %`}
+            labelStyle={{
+              fill: '#F8DE92',
+              fontFamily: 'sans-serif',
+              fontSize: '6px',
+            }}
+            labelPosition={70}
+            lengthAngle={360}
+            lineWidth={15}
+            paddingAngle={5}
+            radius={50}
+            startAngle={0}
+            viewBoxSize={[
+              100,
+              100,
+            ]}
+          />
+        </div>
+        <LabelContainer>
+          {chartpieData.map((label, index) => (
+            <FlexContainer key={index}>
+              <ColorContainer color={label.color} />
+              <p>{label.title}</p>
+            </FlexContainer>
+          ))}
+        </LabelContainer>
       </ChartContainer>
-      <LabelContainer>
-        {chartpieData.map((label) => (
-          <FlexContainer>
-            <ColorContainer color={label.color} />
-            <p>{label.title}</p>
-          </FlexContainer>
-        ))}
-
-      </LabelContainer>
     </div>
   );
 };

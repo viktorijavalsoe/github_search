@@ -24,6 +24,9 @@ export interface IRepositoryNode{
 export interface IUserInfo {
   id: string;
   bio: string;
+  name: string;
+  url: string;
+  avatarUrl: string;
   createdAt: string;
   repositories: {
     totalCount: number;
@@ -33,5 +36,11 @@ export interface IUserInfo {
 }
 
 export interface IUser{
-  node: IUserInfo;
+  node: IUserInfo
+}
+
+export interface IUserSearch{
+  search: {
+    edges: Array<IUser>
+  }
 }

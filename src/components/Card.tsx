@@ -61,8 +61,7 @@ const Card = ({ repository, handleAddRepo }: ICard) : JSX.Element => {
           <p>{repository.node.stargazers.totalCount}</p>
         </StarContainer>
       </Wrapper>
-			<ButtonIcon text="Add Repository" starred={isStarred} handleSubmit={() => addRepository(repository.node.id)} />
-
+      <ButtonIcon text="Star Repository" starred={isStarred} handleSubmit={() => addRepository(repository.node.id)} />
       <p>{repository.node.description}</p>
       <StyledLink href={repository.node.url}>
         View repository
